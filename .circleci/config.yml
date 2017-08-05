@@ -5,4 +5,4 @@ jobs:
        - image: circleci/php:apache
      steps:
        - checkout
-       - run: echo "hello world"
+       - run: randomcommandfailtest
