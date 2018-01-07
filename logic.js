@@ -338,8 +338,8 @@ function drawScores(){
             html += "<div style=\"height:100%;\" class=\"container-fluid\">";
             html += "<div style=\"height:100%;\" class=\"row\">";
             html += "<div style=\"height:100%;\" class=\"col-xs-5\">";
-            html += "<div style=\"height:20%; width:100%;\" id=\"table\"></div>";
-            html += "<div style=\"height:79%;padding-top:50px;\" id=\"averageChart\"></div>";
+            html += "<div style=\"height:24%; width:100%;\" id=\"table\"></div>";
+            html += "<div style=\"height:75%;\" id=\"averageChart\"></div>";
             html += "</div>";
             html += "<div style=\"height:100%;\" class=\"col-xs-7\">";
             html += "<div style=\"height:99%;\" id=\"costChart\"></div>";
@@ -357,9 +357,9 @@ function drawScores(){
             function drawTable(){
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Team Name');
-                data.addColumn('number', 'Average Cost');
-                data.addColumn('number', 'Total Cost');
-                data.addColumn('number', 'Weeks Done');
+                data.addColumn('number', 'Avg Cost');
+                data.addColumn('number', 'Ttl Cost');
+                data.addColumn('number', 'Weeks');
 
                 for(var i = 0; i < gameNames.length; i++){
                     if(((gameData[gameNames[i]].currentWeek)-1) == 0){
@@ -373,7 +373,7 @@ function drawScores(){
                 }
 
                 var table = new google.visualization.Table(document.getElementById('table'));
-                table.draw(data, {showRowNumber: true, sortColumn: 1, sortAscending: true, width: '100%'});
+                table.draw(data, {showRowNumber: true, sortColumn: 1, sortAscending: true, width: '100%', height: '100%'});
             }
 
             function drawLineChart(){
