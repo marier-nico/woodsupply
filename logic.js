@@ -430,7 +430,7 @@ function drawScores(){
                     if(gameData[gameNames[i]] == null || (gameData[gameNames[i]]["currentWeek"] - 1) == 0){
                         rows.push([gameNames[i], 0]);
                     } else {
-                        rows.push([gameNames[i], Math.round((gameData[gameNames[i]]["costList"][gameData[gameNames[i]]["costList"].length - 1]) / (gameData[gameNames[i]]["currentWeek"] - 1))]);
+                        rows.push([gameNames[i], Math.round((gameData[gameNames[i]]["costList"][gameData[gameNames[i]]["currentWeek"] - 1]) / (gameData[gameNames[i]]["currentWeek"] - 1))]);
                     }
                 }
                 data.addRows(rows);
