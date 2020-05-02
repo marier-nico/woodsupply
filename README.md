@@ -10,4 +10,5 @@ The scoreboard provides nice visualizations for game scores, that's really all t
 
     - Layout : [react-grid-layout](https://github.com/STRML/react-grid-layout)
     - Charts : [nivo](https://nivo.rocks/)
-    - Notifications : [react-notifications-component](https://teodosii.github.io/react-notifications-component/)
+    - Tables : [react-bootstrap](https://react-bootstrap.github.io/)
+    - Burger menu : [react-burger-menu](https://github.com/negomi/react-burger-menu)
