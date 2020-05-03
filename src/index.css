@@ -21,6 +21,11 @@ select:not([multiple]) {
   background-position-y: 10px;
 }
 
+svg > g > line {
+  stroke: white !important;
+  stroke-opacity: 1 !important;
+}
+
 /* -------------------------------------- */
 /* ------------- bootstrap -------------- */
 /* -------------------------------------- */
