@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { slide as Menu } from "react-burger-menu";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
@@ -10,31 +10,58 @@ import { BsPlus } from "react-icons/bs";
 import { AiOutlineMinus } from "react-icons/ai";
 import Container from "react-bootstrap/Container";
 
-const data = ["team_a", "team_b", "team_c", "team_d"];
-
 function BurgerMenu(props) {
-  const [selectedTeams, setSelectedTeams] = useState([]);
   const [highlightedTeams, setHighlightedTeams] = useState([]);
   const [highlightedSelectedTeams, setHighlightedSelectedTeams] = useState([]);
+  const [refreshIntervalIsInvalid, setRefreshIntervalIsInvalid] = useState(
+    false
+  );
+  const [refreshInSecOrMin, setRefreshInSecOrMin] = useState("sec");
+  const [rawRefreshInterval, setRawRefreshInterval] = useState("30");
+
+  useEffect(() => {
+    let refreshAsNumber = Number(rawRefreshInterval);
+    if (Number.isNaN(refreshAsNumber)) {
+      setRefreshIntervalIsInvalid(true);
+    } else {
+      setRefreshIntervalIsInvalid(false);
+      if (refreshInSecOrMin === "sec") {
+        refreshAsNumber *= 1000;
+      } else {
+        refreshAsNumber *= 1000 * 60;
+      }
+      props.setRefreshInterval(refreshAsNumber);
+    }
+  }, [refreshInSecOrMin, rawRefreshInterval]);
 
   return (
     <Menu width={"450px"}>
       <Container>
-        <Tabs className="selection-tabs" fill defaultActiveKey="competitions">
+        <Tabs
+          className="selection-tabs"
+          fill
+          activeKey={props.dataSource}
+          onSelect={(tab) => props.setDataSource(tab)}
+        >
           <Tab eventKey="competitions" title="Competitions">
             {/*Competition selection*/}
             <Form>
               <Form.Group controlId="competitions.select">
                 <Form.Label>Competition List</Form.Label>
-                <Form.Control as="select">
-                  {data.map((comp) => (
+                <Form.Control
+                  as="select"
+                  onChange={({ target }) =>
+                    props.setSelectedComp(target.selectedOptions[0].innerText)
+                  }
+                >
+                  {props.comps.map((comp) => (
                     <option key={comp}>{comp}</option>
                   ))}
                 </Form.Control>
               </Form.Group>
             </Form>
           </Tab>
-          <Tab eventKey="teamSelect" title="Manual Selection">
+          <Tab eventKey="teams" title="Manual Selection">
             {/*Manual team selection*/}
             <Form>
               <Form.Group controlId="manual.server">
@@ -59,7 +86,7 @@ function BurgerMenu(props) {
                     )
                   }
                 >
-                  {data.map((team) => (
+                  {props.teams.map((team) => (
                     <option key={team}>{team}</option>
                   ))}
                 </Form.Control>
@@ -73,9 +100,9 @@ function BurgerMenu(props) {
                   <Button
                     variant="outline-success"
                     onClick={() =>
-                      setSelectedTeams(
+                      props.setSelectedTeams(
                         Array.from(
-                          new Set(selectedTeams.concat(highlightedTeams))
+                          new Set(props.selectedTeams.concat(highlightedTeams))
                         )
                       )
                     }
@@ -87,8 +114,8 @@ function BurgerMenu(props) {
                   <Button
                     variant="outline-danger"
                     onClick={() => {
-                      setSelectedTeams(
-                        selectedTeams.filter(
+                      props.setSelectedTeams(
+                        props.selectedTeams.filter(
                           (elm) => !highlightedSelectedTeams.includes(elm)
                         )
                       );
@@ -113,7 +140,7 @@ function BurgerMenu(props) {
                     );
                   }}
                 >
-                  {selectedTeams.map((team) => (
+                  {props.selectedTeams.map((team) => (
                     <option key={team}>{team}</option>
                   ))}
                 </Form.Control>
@@ -128,18 +155,27 @@ function BurgerMenu(props) {
             <Form.Label column sm="5">
               Refresh every
             </Form.Label>
-            <Col sm="3">
-              <Form.Control defaultValue="30" />
-            </Col>
             <Col sm="4">
-              <Form.Control as="select">
+              <Form.Control
+                defaultValue="30"
+                isInvalid={refreshIntervalIsInvalid}
+                onChange={({ target }) => setRawRefreshInterval(target.value)}
+              />
+            </Col>
+            <Col sm="3">
+              <Form.Control
+                as="select"
+                onChange={({ target }) =>
+                  setRefreshInSecOrMin(target.selectedOptions[0].innerText)
+                }
+              >
                 <option>sec</option>
                 <option>min</option>
               </Form.Control>
             </Col>
           </Form.Group>
           <Form.Group controlId="select.submit">
-            <Button variant="dark" block>
+            <Button variant="dark" block onClick={() => props.getData()}>
               Submit
             </Button>
           </Form.Group>

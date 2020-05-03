@@ -32,20 +32,31 @@ function useWindowSize() {
 }
 
 function App() {
-  try {
-    (async () => {
-      let stuffA = await queryScores(["team_a"]);
-      let stuffB = await queryCompetition("comp_b");
-      let stuffC = await queryCompetitions();
-      let stuffD = await queryTeams();
-      console.log(stuffA);
-      console.log(stuffB);
-      console.log(stuffC);
-      console.log(stuffD);
-    })();
-  } catch (e) {
-    console.error(e);
+  const [comps, setComps] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [selectedComp, setSelectedComp] = useState("");
+  const [selectedTeams, setSelectedTeams] = useState([]);
+  const [dataSource, setDataSource] = useState("competitions"); // competitions or teams
+  const [data, setData] = useState({});
+  const [refreshInterval, setRefreshInterval] = useState(30 * 1000); // Interval in milliseconds
+  useEffect(() => {
+    const fetchCompsAndTeams = async () => {
+      setComps(await queryCompetitions());
+      setTeams(await queryTeams());
+    };
+
+    fetchCompsAndTeams();
+  }, []);
+
+  async function getData() {
+    if (dataSource === "competitions") {
+      const comp = selectedComp || comps[0];
+      setData(await queryCompetition(comp));
+    } else {
+      setData(await queryScores(selectedTeams));
+    }
   }
+
   return (
     <div>
       <div
@@ -56,7 +67,18 @@ function App() {
           backgroundColor: "#23272b",
         }}
       >
-        <BurgerMenu />
+        <BurgerMenu
+          comps={comps}
+          teams={teams}
+          dataSource={dataSource}
+          setDataSource={setDataSource}
+          selectedComp={selectedComp}
+          setSelectedComp={setSelectedComp}
+          selectedTeams={selectedTeams}
+          setSelectedTeams={setSelectedTeams}
+          setRefreshInterval={setRefreshInterval}
+          getData={getData}
+        />
       </div>
       <div
         style={{
@@ -68,6 +90,7 @@ function App() {
         <ChartArea
           width={useWindowSize().width - 75}
           height={useWindowSize().height}
+          chartData={data}
         />
       </div>
     </div>
