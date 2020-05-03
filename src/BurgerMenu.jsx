@@ -125,7 +125,7 @@ function BurgerMenu(props) {
                   </Button>
                 </Col>
               </Form.Group>
-              <Form.Group controlId="manual.selected">
+              <Form.Group>
                 <Form.Label>Selected Teams</Form.Label>
                 <Form.Control
                   as="select"
@@ -174,7 +174,7 @@ function BurgerMenu(props) {
               </Form.Control>
             </Col>
           </Form.Group>
-          <Form.Group controlId="select.submit">
+          <Form.Group>
             <Button variant="dark" block onClick={() => props.handleSubmit()}>
               Submit
             </Button>
