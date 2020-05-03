@@ -2,7 +2,7 @@ import React from "react";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.scss";
+import "./index.css";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";

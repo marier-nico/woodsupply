@@ -12,3 +12,4 @@ The scoreboard provides nice visualizations for game scores, that's really all t
     - Charts : [nivo](https://nivo.rocks/)
     - Tables : [react-bootstrap](https://react-bootstrap.github.io/)
     - Burger menu : [react-burger-menu](https://github.com/negomi/react-burger-menu)
+    - Icons : [react-icons](https://react-icons.github.io/react-icons/)
