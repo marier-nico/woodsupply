@@ -32,7 +32,7 @@ function BurgerMenu(props) {
       }
       props.setRefreshInterval(refreshAsNumber);
     }
-  }, [refreshInSecOrMin, rawRefreshInterval]);
+  }, [refreshInSecOrMin, rawRefreshInterval, props]);
 
   return (
     <Menu width={"450px"}>
@@ -175,7 +175,7 @@ function BurgerMenu(props) {
             </Col>
           </Form.Group>
           <Form.Group controlId="select.submit">
-            <Button variant="dark" block onClick={() => props.getData()}>
+            <Button variant="dark" block onClick={() => props.handleSubmit()}>
               Submit
             </Button>
           </Form.Group>

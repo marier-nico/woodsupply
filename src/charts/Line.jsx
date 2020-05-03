@@ -1,13 +1,6 @@
 import React from "react";
 import { ResponsiveLine } from "@nivo/line";
 
-const data = {
-  team_a: { 1: 120, 2: 200, 3: 225, 4: 300, 5: 10000 },
-  team_b: { 1: 100, 2: 150, 3: 200, 4: 240 },
-  team_c: { 1: 75, 2: 90, 3: 113, 4: 180 },
-  team_d: {},
-};
-
 function toSeries(data) {
   let series = [];
 
@@ -25,7 +18,7 @@ function toSeries(data) {
 function Line(props) {
   const properties = {
     margin: { top: 8, right: 5, bottom: 50, left: 80 },
-    data: toSeries(data),
+    data: toSeries(props.data),
     colors: { scheme: "paired" },
     enableSlices: "x",
     motionStiffness: 150,

@@ -39,6 +39,8 @@ function App() {
   const [dataSource, setDataSource] = useState("competitions"); // competitions or teams
   const [data, setData] = useState({});
   const [refreshInterval, setRefreshInterval] = useState(30 * 1000); // Interval in milliseconds
+  const [refreshFunction, setRefreshFunction] = useState();
+
   useEffect(() => {
     const fetchCompsAndTeams = async () => {
       setComps(await queryCompetitions());
@@ -48,7 +50,15 @@ function App() {
     fetchCompsAndTeams();
   }, []);
 
-  async function getData() {
+  async function handleSubmit() {
+    await getData(dataSource, selectedComp, selectedTeams, comps);
+    if (refreshFunction) {
+      clearInterval(refreshFunction)
+    }
+      setRefreshFunction(setInterval(getData, refreshInterval, dataSource, selectedComp, selectedTeams, comps));
+  }
+
+  async function getData(dataSource, selectedComp, selectedTeams, comps) {
     if (dataSource === "competitions") {
       const comp = selectedComp || comps[0];
       setData(await queryCompetition(comp));
@@ -77,7 +87,7 @@ function App() {
           selectedTeams={selectedTeams}
           setSelectedTeams={setSelectedTeams}
           setRefreshInterval={setRefreshInterval}
-          getData={getData}
+          handleSubmit={handleSubmit}
         />
       </div>
       <div

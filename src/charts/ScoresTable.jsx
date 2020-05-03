@@ -1,13 +1,6 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 
-const data = {
-  team_a: { 1: 120, 2: 200, 3: 225, 4: 300 },
-  team_b: { 1: 100, 2: 150, 3: 200, 4: 240 },
-  team_c: { 1: 75, 2: 90, 3: 113, 4: 180 },
-  team_d: {},
-};
-
 function getTableElements(data) {
   let rows = [];
 
@@ -20,8 +13,8 @@ function getTableElements(data) {
     rows.push(
       <tr key={teamName}>
         <td>{teamName}</td>
-        <td>{averageCost}</td>
-        <td>{totalCost}</td>
+        <td>{averageCost.toFixed(2)}</td>
+        <td>{totalCost.toFixed(2)}</td>
         <td>{currentWeek}</td>
       </tr>
     );
@@ -41,7 +34,7 @@ function ScoresTable(props) {
           <th>Week</th>
         </tr>
       </thead>
-      <tbody>{getTableElements(data)}</tbody>
+      <tbody>{getTableElements(props.data)}</tbody>
     </Table>
   );
 }

@@ -22,14 +22,14 @@ function ChartArea(props) {
       <div key="lineChart">
         <h1 style={{ height: "4%", marginBottom: "4%" }}>Cost per week</h1>
         <div style={{ height: "90%" }}>
-          <Line />
+          <Line data={props.chartData} />
         </div>
       </div>
       <div key="table">
-        <ScoresTable />
+        <ScoresTable data={props.chartData} />
       </div>
       <div key="barChart">
-        <Bar />
+        <Bar data={props.chartData} />
       </div>
     </GridLayout>
   );
