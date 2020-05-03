@@ -17,7 +17,7 @@ function toSeries(data) {
 
 function Line(props) {
   const properties = {
-    margin: { top: 8, right: 5, bottom: 50, left: 80 },
+    margin: { top: 8, right: 100, bottom: 50, left: 80 },
     data: toSeries(props.data),
     colors: { scheme: "paired" },
     enableSlices: "x",
@@ -50,7 +50,28 @@ function Line(props) {
     },
   };
 
-  return <ResponsiveLine {...properties} />;
+  return (
+    <ResponsiveLine
+      {...properties}
+      legends={[
+        {
+          anchor: "bottom-right",
+          direction: "column",
+          justify: false,
+          translateX: 90,
+          translateY: 0,
+          itemsSpacing: 0,
+          itemDirection: "left-to-right",
+          itemWidth: 80,
+          itemHeight: 20,
+          itemOpacity: 0.75,
+          symbolSize: 12,
+          symbolShape: "circle",
+          symbolBorderColor: "rgba(0, 0, 0, .5)",
+        },
+      ]}
+    />
+  );
 }
 
 export { Line };

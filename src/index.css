@@ -26,6 +26,10 @@ svg > g > line {
   stroke-opacity: 1 !important;
 }
 
+g > circle + text {
+  fill: white !important;
+}
+
 /* -------------------------------------- */
 /* ------------- bootstrap -------------- */
 /* -------------------------------------- */
