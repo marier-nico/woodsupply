@@ -17,7 +17,7 @@ function Bar(props) {
   const properties = {
     margin: { top: 5, right: 5, bottom: 50, left: 45 },
     data: toSeries(props.data),
-    colors: { scheme: "paired" },
+    colors: { scheme: "nivo" },
     enableGridX: true,
     enableGridY: false,
     layout: "horizontal",

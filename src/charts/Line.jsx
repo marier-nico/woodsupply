@@ -19,7 +19,7 @@ function Line(props) {
   const properties = {
     margin: { top: 8, right: 100, bottom: 50, left: 80 },
     data: toSeries(props.data),
-    colors: { scheme: "paired" },
+    colors: { scheme: "nivo" },
     enableSlices: "x",
     motionStiffness: 150,
     motionDamping: 20,
