@@ -26,10 +26,16 @@ async function queryCompetitions() {
   return data;
 }
 
-async function queryTeams() {
+async function queryTeams(server_url) {
   let response = await fetch(`${server_url}/teams`);
   let data = await response.json();
   return data;
 }
 
-export { queryScores, queryCompetition, queryCompetitions, queryTeams };
+async function queryServers() {
+  let response = await fetch(`${server_url}/servers`)
+  let data = await response.json()
+  return data;
+}
+
+export { queryScores, queryCompetition, queryCompetitions, queryTeams, queryServers };

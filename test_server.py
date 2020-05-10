@@ -22,7 +22,17 @@ fake_db = {
         "comp_b": ["team_a", "team_c"],
         "comp_c": ["team_b", "team_c"],
     },
+    "servers": {
+        "server_a": "http://localhost:8000",
+        "server_b": "http://localhost:8000",
+        "server_c": "http://localhost:8001",
+    },
 }
+
+
+class Server(BaseModel):
+    server_name: str
+    server_url: str
 
 
 class ScoresQuery(BaseModel):
@@ -73,6 +83,14 @@ def query_competitions() -> CompetitionResult:
 @app.get("/teams")
 def query_teams() -> ScoresQuery:
     return list(fake_db["teams"].keys())
+
+
+@app.get("/servers")
+def query_servers() -> List[Server]:
+    return [
+        Server(server_name=server_name, server_url=server_url)
+        for server_name, server_url in fake_db["servers"].items()
+    ]
 
 
 if __name__ == "__main__":

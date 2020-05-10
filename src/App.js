@@ -6,6 +6,7 @@ import {
   queryCompetition,
   queryCompetitions,
   queryTeams,
+  queryServers,
 } from "./utils.js";
 
 function useWindowSize() {
@@ -32,6 +33,7 @@ function useWindowSize() {
 }
 
 function App() {
+  const [servers, setServers] = useState([]);
   const [comps, setComps] = useState([]);
   const [teams, setTeams] = useState([]);
   const [selectedComp, setSelectedComp] = useState("");
@@ -42,20 +44,52 @@ function App() {
   const [refreshFunction, setRefreshFunction] = useState();
 
   useEffect(() => {
-    const fetchCompsAndTeams = async () => {
+    const fetchComps = async () => {
       setComps(await queryCompetitions());
-      setTeams(await queryTeams());
     };
 
-    fetchCompsAndTeams();
+    fetchComps();
   }, []);
+
+  useEffect(() => {
+    const fetchServers = async () => {
+      setServers(await queryServers());
+    };
+
+    fetchServers();
+  }, []);
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      let fetchedTeams = {};
+      for (const server of servers) {
+        let teams_in_server = await queryTeams(server["server_url"]);
+        fetchedTeams[server["server_name"]] = {
+          server_url: server["server_url"],
+          teams: teams_in_server
+        }
+      }
+      setTeams(fetchedTeams);
+    };
+
+    fetchTeams();
+  }, [servers]);
 
   async function handleSubmit() {
     await getData(dataSource, selectedComp, selectedTeams, comps);
     if (refreshFunction) {
-      clearInterval(refreshFunction)
+      clearInterval(refreshFunction);
     }
-      setRefreshFunction(setInterval(getData, refreshInterval, dataSource, selectedComp, selectedTeams, comps));
+    setRefreshFunction(
+      setInterval(
+        getData,
+        refreshInterval,
+        dataSource,
+        selectedComp,
+        selectedTeams,
+        comps
+      )
+    );
   }
 
   async function getData(dataSource, selectedComp, selectedTeams, comps) {
