@@ -5,7 +5,7 @@ function toSeries(data) {
   let series = [];
 
   for (let [teamName, teamData] of Object.entries(data)) {
-    const totalCost = Object.values(teamData).reduce((a, b) => a + b, 0);
+    const totalCost = Object.values(teamData)[Object.values(teamData).length - 1];
     const averageCost = totalCost / Object.values(teamData).length || 0;
     series.push({ teamName: teamName, averageCost: averageCost.toFixed(2) });
   }
@@ -15,7 +15,7 @@ function toSeries(data) {
 
 function Bar(props) {
   const properties = {
-    margin: { top: 5, right: 5, bottom: 50, left: 45 },
+    margin: { top: 5, right: 5, bottom: 50, left: 50 },
     data: toSeries(props.data),
     colors: { scheme: "nivo" },
     enableGridX: true,
@@ -31,10 +31,10 @@ function Bar(props) {
     axisLeft: {
       legend: "Team Name",
       legendPosition: "middle",
-      legendOffset: -40,
+      legendOffset: -45,
       tickSize: 0,
       tickPadding: 15,
-      tickRotation: -90,
+      tickRotation: -80,
     },
     theme: {
       axis: {

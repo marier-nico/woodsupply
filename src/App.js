@@ -63,10 +63,16 @@ function App() {
     const fetchTeams = async () => {
       let fetchedTeams = {};
       for (const server of servers) {
-        let teams_in_server = await queryTeams(server["server_url"]);
-        fetchedTeams[server["server_name"]] = {
-          server_url: server["server_url"],
-          teams: teams_in_server
+        try {
+          let teams_in_server = await queryTeams(server["server_url"]);
+          fetchedTeams[server["server_name"]] = {
+            server_url: server["server_url"],
+            teams: teams_in_server,
+          };
+        } catch (error) {
+          console.error(
+            `Could not fetch teams on server ${server["server_url"]}`
+          );
         }
       }
       setTeams(fetchedTeams);
@@ -93,12 +99,41 @@ function App() {
   }
 
   async function getData(dataSource, selectedComp, selectedTeams, comps) {
+    let fetchedTeams = [];
     if (dataSource === "competitions") {
       const comp = selectedComp || comps[0];
-      setData(await queryCompetition(comp));
+      fetchedTeams = await queryCompetition(comp);
     } else {
-      setData(await queryScores(selectedTeams));
+      fetchedTeams = selectedTeams;
     }
+
+    let serversWithTeams = {};
+    for (const team of fetchedTeams) {
+      if (serversWithTeams[team["server_name"]]) {
+        serversWithTeams[team["server_name"]].push(team["team_name"]);
+      } else {
+        serversWithTeams[team["server_name"]] = [team["team_name"]];
+      }
+    }
+
+    let newData = {};
+    for (const serverName of Object.keys(serversWithTeams)) {
+      let serverURL = servers.find((server) => {
+        console.log(server);
+        return server.server_name === serverName;
+      }).server_url;
+      let scores = await queryScores(serversWithTeams[serverName], serverURL);
+
+      let existingTeamNames = Object.keys(newData);
+      for (const newTeamName of Object.keys(scores)) {
+        if (existingTeamNames.includes(newTeamName)) {
+          newData[`${newTeamName} (${serverName})`] = scores[newTeamName];
+        } else {
+          newData[newTeamName] = scores[newTeamName];
+        }
+      }
+    }
+    setData(newData);
   }
 
   return (
@@ -114,6 +149,7 @@ function App() {
         <BurgerMenu
           comps={comps}
           teams={teams}
+          servers={servers}
           dataSource={dataSource}
           setDataSource={setDataSource}
           selectedComp={selectedComp}

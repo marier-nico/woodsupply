@@ -5,7 +5,7 @@ function getTableElements(data) {
   let rows = [];
 
   for (let [teamName, teamData] of Object.entries(data)) {
-    const totalCost = Object.values(teamData).reduce((a, b) => a + b, 0);
+    const totalCost = Object.values(teamData)[Object.values(teamData).length - 1];
     const averageCost = totalCost / Object.values(teamData).length || 0;
     const currentWeek =
       Object.keys(teamData)[Object.keys(teamData).length - 1] || 0;
@@ -25,7 +25,7 @@ function getTableElements(data) {
 
 function ScoresTable(props) {
   return (
-    <Table striped bordered hover variant="dark" size="sm">
+    <Table responsive striped bordered hover variant="dark" size="sm">
       <thead>
         <tr>
           <th>Team Name</th>

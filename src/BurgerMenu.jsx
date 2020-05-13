@@ -11,6 +11,7 @@ import { AiOutlineMinus } from "react-icons/ai";
 import Container from "react-bootstrap/Container";
 
 function BurgerMenu(props) {
+  const [selectedServerName, setSelectedServerName] = useState("");
   const [highlightedTeams, setHighlightedTeams] = useState([]);
   const [highlightedSelectedTeams, setHighlightedSelectedTeams] = useState([]);
   const [refreshIntervalIsInvalid, setRefreshIntervalIsInvalid] = useState(
@@ -33,6 +34,14 @@ function BurgerMenu(props) {
       props.setRefreshInterval(refreshAsNumber);
     }
   }, [refreshInSecOrMin, rawRefreshInterval, props]);
+
+  useEffect(() => {
+    if (props.servers[0]) {
+      setSelectedServerName(props.servers[0]["server_name"]);
+    } else {
+      setSelectedServerName("");
+    }
+  }, [props.servers]);
 
   return (
     <Menu width={"450px"}>
@@ -66,11 +75,17 @@ function BurgerMenu(props) {
             <Form>
               <Form.Group controlId="manual.server">
                 <Form.Label>Server Selection</Form.Label>
-                <Form.Control as="select">
-                  <option>Canada</option>
-                  <option>Europe</option>
-                  <option>Asia</option>
-                  <option>Bot</option>
+                <Form.Control
+                  as="select"
+                  onChange={({ target }) =>
+                    setSelectedServerName(target.selectedOptions[0].innerText)
+                  }
+                >
+                  {props.servers.map((server) => (
+                    <option key={server["server_name"]}>
+                      {server["server_name"]}
+                    </option>
+                  ))}
                 </Form.Control>
               </Form.Group>
               <Form.Group controlId="manual.selection">
@@ -79,15 +94,15 @@ function BurgerMenu(props) {
                   as="select"
                   multiple
                   onChange={({ target }) =>
-                    setHighlightedTeams(
-                      Array.from(target.selectedOptions).map(
-                        (option) => option.innerText
-                      )
-                    )
+                    setHighlightedTeams(Array.from(target.selectedOptions))
                   }
                 >
-                  {props.teams.map((team) => (
-                    <option key={team}>{team}</option>
+                  {(props.teams[selectedServerName] || { teams: [] })[
+                    "teams"
+                  ].map((team_name) => (
+                    <option data-servername={selectedServerName} key={team_name}>
+                      {team_name}
+                    </option>
                   ))}
                 </Form.Control>
               </Form.Group>
@@ -99,13 +114,28 @@ function BurgerMenu(props) {
                 <Col sm="6">
                   <Button
                     variant="outline-success"
-                    onClick={() =>
+                    onClick={() => {
+                      let teams = highlightedTeams.map((option) => ({
+                        server_name: option.getAttribute("data-servername"),
+                        team_name: option.innerText,
+                      }));
                       props.setSelectedTeams(
                         Array.from(
-                          new Set(props.selectedTeams.concat(highlightedTeams))
+                          // This big filter just ensures that no duplicates are added
+                          props.selectedTeams
+                            .concat(teams)
+                            .filter(
+                              (team, index, self) =>
+                                index ===
+                                self.findIndex(
+                                  (t) =>
+                                    t.server_name === team.server_name &&
+                                    t.team_name === team.team_name
+                                )
+                            )
                         )
-                      )
-                    }
+                      );
+                    }}
                   >
                     <BsPlus />
                   </Button>
@@ -116,7 +146,14 @@ function BurgerMenu(props) {
                     onClick={() => {
                       props.setSelectedTeams(
                         props.selectedTeams.filter(
-                          (elm) => !highlightedSelectedTeams.includes(elm)
+                          (elm) =>
+                            !highlightedSelectedTeams.some(
+                              (highlightedSelectedTeam) =>
+                                highlightedSelectedTeam.server_name ===
+                                  elm.server_name &&
+                                highlightedSelectedTeam.team_name ===
+                                  elm.team_name
+                            )
                         )
                       );
                     }}
@@ -132,16 +169,22 @@ function BurgerMenu(props) {
                   multiple
                   id="selectedTeams"
                   onChange={({ target }) => {
-                    console.log(target);
-                    setHighlightedSelectedTeams(
-                      Array.from(target.selectedOptions).map(
-                        (option) => option.innerText
-                      )
+                    let teams = Array.from(target.selectedOptions).map(
+                      (option) => ({
+                        server_name: option.getAttribute("data-servername"),
+                        team_name: option.innerText,
+                      })
                     );
+                    setHighlightedSelectedTeams(teams);
                   }}
                 >
                   {props.selectedTeams.map((team) => (
-                    <option key={team}>{team}</option>
+                    <option
+                      data-servername={team["server_name"]}
+                      key={`${team["server_name"]}-${team["team_name"]}`}
+                    >
+                      {team["team_name"]}
+                    </option>
                   ))}
                 </Form.Control>
               </Form.Group>

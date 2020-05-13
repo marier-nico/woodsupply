@@ -18,14 +18,23 @@ fake_db = {
         "team_c": {1: 75, 2: 90, 3: 113, 4: 180},
     },
     "competitions": {
-        "comp_a": ["team_a", "team_b"],
-        "comp_b": ["team_a", "team_c"],
-        "comp_c": ["team_b", "team_c"],
+        "comp_a": [
+            {"server_name": "server_a", "team_name": "team_a"},
+            {"server_name": "server_a", "team_name": "team_b"},
+        ],
+        "comp_b": [
+            {"server_name": "server_b", "team_name": "team_a"},
+            {"server_name": "server_c", "team_name": "team_c"},
+        ],
+        "comp_c": [
+            {"server_name": "server_b", "team_name": "team_b"},
+            {"server_name": "server_a", "team_name": "team_c"},
+        ],
     },
     "servers": {
-        "server_a": "http://localhost:8000",
-        "server_b": "http://localhost:8000",
-        "server_c": "http://localhost:8001",
+        "server_a": "http://localhost:8000/",
+        "server_b": "http://localhost:8000/",
+        "server_c": "http://localhost:8000/",
     },
 }
 
@@ -33,6 +42,11 @@ fake_db = {
 class Server(BaseModel):
     server_name: str
     server_url: str
+
+
+class Team(BaseModel):
+    team_name: str
+    server_name: str
 
 
 class ScoresQuery(BaseModel):
@@ -54,43 +68,55 @@ class CompetitionQuery(BaseModel):
 
 
 class CompetitionResult(BaseModel):
-    competition_names: List[str]
+    teams: List[Team]
 
 
-@app.post("/scores")
+class CompetitionsResult(BaseModel):
+    competitions: List[str]
+
+
+class ServersResult(BaseModel):
+    servers: List[Server]
+
+
+@app.post("/scores/")
 def query_scores(team_names: ScoresQuery) -> ScoresPerWeek:
     result = {}
     for team_name in team_names.team_names:
         if team_name in fake_db["teams"]:
             result[team_name] = fake_db["teams"][team_name]
-    return result
+    return ScoresPerWeek(scores=result)
 
 
-@app.post("/competition_scores")
-def query_competition_scores(competition: CompetitionQuery) -> ScoresPerWeek:
-    result = {}
+@app.post("/competition_teams/")
+def query_competition_teams(competition: CompetitionQuery) -> CompetitionResult:
+    result = []
     if competition.competition_name in fake_db["competitions"]:
-        for team_name in fake_db["competitions"][competition.competition_name]:
-            result[team_name] = fake_db["teams"][team_name]
-    return result
+        result = [
+            Team(team_name=team["team_name"], server_name=team["server_name"])
+            for team in fake_db["competitions"][competition.competition_name]
+        ]
+    return CompetitionResult(teams=result)
 
 
-@app.get("/competitions")
-def query_competitions() -> CompetitionResult:
-    return list(fake_db["competitions"].keys())
+@app.get("/competitions/")
+def query_competitions() -> CompetitionsResult:
+    return CompetitionsResult(competitions=list(fake_db["competitions"].keys()))
 
 
-@app.get("/teams")
+@app.get("/teams/")
 def query_teams() -> ScoresQuery:
-    return list(fake_db["teams"].keys())
+    return ScoresQuery(team_names=list(fake_db["teams"].keys()))
 
 
-@app.get("/servers")
-def query_servers() -> List[Server]:
-    return [
-        Server(server_name=server_name, server_url=server_url)
-        for server_name, server_url in fake_db["servers"].items()
-    ]
+@app.get("/servers/")
+def query_servers() -> ServersResult:
+    return ServersResult(
+        servers=[
+            Server(server_name=server_name, server_url=server_url)
+            for server_name, server_url in fake_db["servers"].items()
+        ]
+    )
 
 
 if __name__ == "__main__":

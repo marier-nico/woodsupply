@@ -17,7 +17,7 @@ function toSeries(data) {
 
 function Line(props) {
   const properties = {
-    margin: { top: 8, right: 100, bottom: 50, left: 80 },
+    margin: { top: 8, right: 150, bottom: 50, left: 80 },
     data: toSeries(props.data),
     colors: { scheme: "nivo" },
     enableSlices: "x",
