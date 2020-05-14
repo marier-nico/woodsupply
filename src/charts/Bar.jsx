@@ -6,7 +6,7 @@ function toSeries(data) {
 
   for (let [teamName, teamData] of Object.entries(data)) {
     const totalCost = Object.values(teamData)[Object.values(teamData).length - 1];
-    const averageCost = totalCost / Object.values(teamData).length || 0;
+    const averageCost = totalCost / (Object.values(teamData).length - 1) || 0;
     series.push({ teamName: teamName, averageCost: averageCost.toFixed(2) });
   }
 
