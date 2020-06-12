@@ -96,6 +96,7 @@ function BurgerMenu(props) {
                   onChange={({ target }) =>
                     setHighlightedTeams(Array.from(target.selectedOptions))
                   }
+                  style={{height: "300px"}}
                 >
                   {(props.teams[selectedServerName] || { teams: [] })[
                     "teams"
