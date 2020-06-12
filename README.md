@@ -22,4 +22,3 @@ automated builds.
 
 - `REACT_APP_MAIN_SERVER_URL`=`"http://localhost:8000/"`
 - `REACT_APP_API_ROUTE_SUFFIX`=`""`
-- `PUBLIC_URL`=`"http://localhost:3000/"`
