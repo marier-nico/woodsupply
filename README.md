@@ -16,7 +16,7 @@ The scoreboard provides nice visualizations for game scores, that's really all t
 
 # Env Variables
 
-Environment variables used in this project are listed below, and should be set in `.env`.
+Environment variables used in this project are listed below, and should be set in `.env.dev`.
 These defaults shouldn't really change in this repository, but they are very convenient for
 automated builds.
 
