@@ -1,0 +1,144 @@
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #121416;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+}
+
+hr {
+  border-top: 2px dashed #58616b;
+}
+
+select:not([multiple]) {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg stroke='currentColor' fill='lightgray' stroke-width='0' viewBox='0 0 512 512' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z'></path></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 10px;
+}
+
+svg > g > line {
+  stroke: white !important;
+  stroke-opacity: 1 !important;
+}
+
+g > circle + text {
+  fill: white !important;
+}
+
+/* -------------------------------------- */
+/* ------------- bootstrap -------------- */
+/* -------------------------------------- */
+
+.selection-tabs a.active {
+  color: white !important;
+  background-color: #2c3136 !important;
+  border-color: black !important;
+}
+
+.selection-tabs a {
+  color: white !important;
+  background-color: #3e454b !important;
+  border-color: black !important;
+}
+
+.form-control,.form-control:active,.form-control:focus {
+  background-color: #343a40;
+  border-color: black;
+  color: white;
+}
+
+.table-responsive {
+  width: 98%;
+  height: 95%;
+}
+
+/* -------------------------------------- */
+/* --------- react-grid-layout ---------- */
+/* -------------------------------------- */
+
+.react-grid-item > .react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* -------------------------------------- */
+/* --------- react-burger-menu ---------- */
+/* -------------------------------------- */
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 10px;
+  top: 10px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #373a47;
+}
+
+/* Color/shape of burger icon bars on hover*/
+.bm-burger-bars-hover {
+  background: #a5a5a5;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/*
+Sidebar wrapper styles
+Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+*/
+.bm-menu-wrap {
+  position: fixed;
+  height: 100%;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #23272b;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+  padding: 0.8em;
+}
+
+/* Individual item */
+.bm-item {
+  display: inline-block;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
